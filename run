@@ -1,0 +1,67 @@
+#!/bin/bash
+
+FOLDER=tasks
+
+first=1
+last=31
+
+function write()
+{
+	if [ "$text" == "" ]; then 
+		echo "Nothing to write"
+	else
+		echo "$text" >> $fil
+	fi
+}
+
+function Delete()
+{
+	ans=$(echo -e "NO\nYES" | dmenu -p "Do you want to delete the task? ")
+	if [ $ans == "YES" ]; then
+		sed -i "/$text/d" $fil
+		if [ "`cat $fil`" == "" ]; then
+			rm $fil
+		fi
+	else
+		echo "Not Deleted"
+	fi
+}
+
+
+while true
+do
+day=$(for i in $(seq $last)
+do
+	echo $i
+done | dmenu -p `date +%B_%Y`)
+
+if [ -z $day ] 
+then
+	exit
+else
+	if (( $day<$first || $day>$last))
+	then
+		echo "Wrong Date - "$day
+	else
+		fil=$FOLDER/`date +%B_%Y`_$day
+		echo "File is "$fil
+		if [ -e $fil ]
+		then
+			text=$(cat $fil | sort -n | dmenu )
+			if [ "$text" != "" ]; then
+				grep "$text" $fil > /dev/null
+				if (($? != "0"))
+				then
+					write
+				else
+					Delete
+				fi
+			fi
+		else
+#			touch $fil
+			text=$(echo "" | sort -n | dmenu )
+			write
+		fi
+	fi
+fi
+done

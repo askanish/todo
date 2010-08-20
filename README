@@ -1,0 +1,22 @@
+About the app
+-------------
+	A simple todo app built using dmenu (suckless.org).
+
+Usage
+-----
+	todo [-f]
+		-f - Folder to save the todo tasks
+
+
+Features
+--------
+	* List tasks for a day	
+	* Add tasks
+	* Delete tasks
+		
+ToDo
+----
+	* Add tasks across different months and years
+	* Delete multiple tasks (Have to use multi select patch of dmenu)
+	* Delete a day's task entirely
+
