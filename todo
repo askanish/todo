@@ -1,10 +1,27 @@
 #!/bin/bash
 
-FOLDER=tasks
+##------------------------ Parse the option switches
+if [ $# != 0 ]; then
+	if [ "$1" == "-f" ]; then
+		if [ -d $2 ]; then
+			FOLDER=$2
+		else
+			echo "Folder does not exists"
+			exit
+		fi
+	else
+		echo "Error"
+		exit
+	fi
+else
+	FOLDER=./tasks
+fi
 
+##------------------------ Find the number of days in current month
 first=1
 last=31
 
+##------------------------ Write Task into file
 function write()
 {
 	if [ "$text" == "" ]; then 
@@ -14,6 +31,7 @@ function write()
 	fi
 }
 
+##------------------------ Delete a Task
 function Delete()
 {
 	ans=$(echo -e "NO\nYES" | dmenu -p "Do you want to delete the task? ")
@@ -22,12 +40,13 @@ function Delete()
 		if [ "`cat $fil`" == "" ]; then
 			rm $fil
 		fi
-	else
-		echo "Not Deleted"
+	#else
+		#echo "Not Deleted"
 	fi
 }
 
 
+##------------------------ Main logic of the program
 while true
 do
 day=$(for i in $(seq $last)
@@ -44,7 +63,7 @@ else
 		echo "Wrong Date - "$day
 	else
 		fil=$FOLDER/`date +%B_%Y`_$day
-		echo "File is "$fil
+		#echo "File is "$fil
 		if [ -e $fil ]
 		then
 			text=$(cat $fil | sort -n | dmenu )
@@ -58,7 +77,6 @@ else
 				fi
 			fi
 		else
-#			touch $fil
 			text=$(echo "" | sort -n | dmenu )
 			write
 		fi
