@@ -4,8 +4,14 @@ About the app
 
 Usage
 -----
-	todo [-f]
-		-f - Folder to save the todo tasks
+	todo [-f] [-b] [-nf <color>] [-nb <color>] [-sf <color>] [-sb <color>]
+
+		-b		- Display in bottom
+		-f 	- Folder to save the todo tasks
+		-nb 	- Normal Background color
+		-nf 	- Normal Foreground color
+		-sb 	- Selected Background color
+		-sf 	- Selected Foreground color
 
 
 Features
@@ -18,8 +24,8 @@ ToDo
 ----
 	* Add tasks across different months and years
 	* Delete multiple tasks (Have to use multi select patch of dmenu)
-	* Delete a day's task entirely
-	* Implement colors
+	* Delete a day's task entirely // DONE
+	* Implement colors // DONE
 
 
 Accidental Feature
