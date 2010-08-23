@@ -19,7 +19,7 @@ fi
 
 ##------------------------ Find the number of days in current month
 first=1
-last=31
+last=$( date -d "`date -d "next month" +%m/01/%Y` yesterday" +%d )
 
 ##------------------------ Write Task into file
 function write()
