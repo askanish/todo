@@ -30,8 +30,8 @@ ToDo
 
 Accidental Feature
 -------------------
-If you want to create different task lists based on some category, say, (i) Office related ToDos (ii) Personal chores, you can do it simply by having two differnt folders where you save the tasks and call using the '-f' flag.
+If you want to create different task lists based on some category, say, (i) Office related ToDos (ii) Personal chores, you can do it simply by having two different folders where you save the tasks and call them using the '-f' flag.
 
-i,e, 
-	todo -f office
-	todo -f personal
+e.g, 
+	todo -f ./office
+	todo -f ./personal

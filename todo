@@ -1,5 +1,22 @@
 #!/bin/bash
 
+##------------------------ Function to display usage
+function Usage()
+{
+	echo -e "Usage\n-----"
+	echo -e "todo [-f] [-b] [-nf <color>] [-nb <color>] [-sf <color>] [-sb <color>]\n"
+
+	echo -e "-b\t- Display in bottom"
+	echo -e "-f\t- Folder to save the todo tasks"
+	echo -e "-nb\t- Normal Background color"
+	echo -e "-nf\t- Normal Foreground color"
+	echo -e "-sb\t- Selected Background color"
+	echo -e "-sf\t- Selected Foreground color"
+	echo 
+	exit 1
+}
+
+
 ##------------------------ Parse the option switches
 DMENU="dmenu"
 FOLDER="tasks"
@@ -9,19 +26,21 @@ do
 		"-f") if [ -d $2 ]; then 
 					FOLDER=$2
 				else
-					echo "Bad Dir"
+					echo "Fatal Error! : '$2' is not a directory"
+					exit 1
 				fi;;
 		"-nf") DMENU="$DMENU -nf $2";;
 		"-nb") DMENU="$DMENU -nb $2";;
 		"-sf") DMENU="$DMENU -sb $2";;
 		"-sb") DMENU="$DMENU -sb $2";;
 		"-b") DMENU="$DMENU -b";;
+		"-"*) Usage ; exit 1;;
 	esac
 	shift
 done
 
 #echo $FOLDER
-echo $DMENU
+#echo $DMENU
 
 ##------------------------ Find the number of days in current month
 first=1
@@ -30,11 +49,7 @@ last=$( date -d "`date -d "next month" +%m/01/%Y` yesterday" +%d )
 ##------------------------ Write Task into file
 function write()
 {
-	if [ "$text" == "" ]; then 
-		echo "Nothing to write"
-	else
 		echo "$text" >> $fil
-	fi
 }
 
 ##------------------------ Delete a Task
@@ -98,7 +113,9 @@ else
 			fi
 		else
 			text=$(echo "" | sort -n | $DMENU )
-			write
+			if [ "$text" != "" ]; then
+				write
+			fi
 		fi
 	fi
 fi
