@@ -19,4 +19,5 @@ ToDo
 	* Add tasks across different months and years
 	* Delete multiple tasks (Have to use multi select patch of dmenu)
 	* Delete a day's task entirely
+	* Implement colors
 

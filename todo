@@ -35,13 +35,23 @@ function write()
 function Delete()
 {
 	ans=$(echo -e "NO\nYES" | dmenu -p "Do you want to delete the task? ")
-	if [ $ans == "YES" ]; then
+	if [ "$ans" == "YES" ]; then
 		sed -i "/$text/d" $fil
 		if [ "`cat $fil`" == "" ]; then
 			rm $fil
 		fi
 	#else
 		#echo "Not Deleted"
+	fi
+}
+
+##------------------------ Delete entire Day
+function Delete_Day()
+{
+	#echo "rm $fil"
+	ans=$(echo -e "NO\nYES" | dmenu -p "Delete entire day's task list? ")
+	if [ "$ans" == "YES" ]; then
+		rm $fil
 	fi
 }
 
@@ -66,14 +76,18 @@ else
 		#echo "File is "$fil
 		if [ -e $fil ]
 		then
-			text=$(cat $fil | sort -n | dmenu )
+			text=$(echo -e "`cat $fil | sort -n`\n#delete_all" | dmenu )
 			if [ "$text" != "" ]; then
-				grep "$text" $fil > /dev/null
-				if (($? != "0"))
-				then
-					write
+				if [ "$text" == "#delete_all" ]; then 
+					Delete_Day
 				else
-					Delete
+					grep "$text" $fil > /dev/null
+					if (($? != "0"))
+					then
+						write
+					else
+						Delete
+					fi
 				fi
 			fi
 		else
