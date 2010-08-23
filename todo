@@ -1,21 +1,27 @@
 #!/bin/bash
 
 ##------------------------ Parse the option switches
-if [ $# != 0 ]; then
-	if [ "$1" == "-f" ]; then
-		if [ -d $2 ]; then
-			FOLDER=$2
-		else
-			echo "Folder does not exists"
-			exit
-		fi
-	else
-		echo "Error"
-		exit
-	fi
-else
-	FOLDER=./tasks
-fi
+DMENU="dmenu"
+FOLDER="tasks"
+while [ $# -gt 0 ]
+do
+	case "$1" in
+		"-f") if [ -d $2 ]; then 
+					FOLDER=$2
+				else
+					echo "Bad Dir"
+				fi;;
+		"-nf") DMENU="$DMENU -nf $2";;
+		"-nb") DMENU="$DMENU -nb $2";;
+		"-sf") DMENU="$DMENU -sb $2";;
+		"-sb") DMENU="$DMENU -sb $2";;
+		"-b") DMENU="$DMENU -b";;
+	esac
+	shift
+done
+
+#echo $FOLDER
+echo $DMENU
 
 ##------------------------ Find the number of days in current month
 first=1
@@ -34,7 +40,7 @@ function write()
 ##------------------------ Delete a Task
 function Delete()
 {
-	ans=$(echo -e "NO\nYES" | dmenu -p "Do you want to delete the task? ")
+	ans=$(echo -e "NO\nYES" | $DMENU -p "Do you want to delete the task? ")
 	if [ "$ans" == "YES" ]; then
 		sed -i "/$text/d" $fil
 		if [ "`cat $fil`" == "" ]; then
@@ -49,7 +55,7 @@ function Delete()
 function Delete_Day()
 {
 	#echo "rm $fil"
-	ans=$(echo -e "NO\nYES" | dmenu -p "Delete entire day's task list? ")
+	ans=$(echo -e "NO\nYES" | $DMENU -p "Delete entire day's task list? ")
 	if [ "$ans" == "YES" ]; then
 		rm $fil
 	fi
@@ -62,7 +68,7 @@ do
 day=$(for i in $(seq $last)
 do
 	echo $i
-done | dmenu -p `date +%B_%Y`)
+done | $DMENU -p `date +%B_%Y`)
 
 if [ -z $day ] 
 then
@@ -76,7 +82,7 @@ else
 		#echo "File is "$fil
 		if [ -e $fil ]
 		then
-			text=$(echo -e "`cat $fil | sort -n`\n#delete_all" | dmenu )
+			text=$(echo -e "`cat $fil | sort -n`\n#delete_all" | $DMENU )
 			if [ "$text" != "" ]; then
 				if [ "$text" == "#delete_all" ]; then 
 					Delete_Day
@@ -91,7 +97,7 @@ else
 				fi
 			fi
 		else
-			text=$(echo "" | sort -n | dmenu )
+			text=$(echo "" | sort -n | $DMENU )
 			write
 		fi
 	fi
