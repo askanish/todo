@@ -18,6 +18,10 @@ function Usage()
 
 
 ##------------------------ Parse the option switches
+if [ "`which dmenu`" == "" ]; then
+	echo "Please install 'dmenu' first. Visit www.suckless.org "
+	exit 1
+fi
 DMENU="dmenu"
 FOLDER="tasks"
 while [ $# -gt 0 ]
